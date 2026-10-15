@@ -1,0 +1,67 @@
+- 1. Database Creation
+DROP DATABASE IF EXISTS CollegeDB;
+CREATE DATABASE CollegeDB;
+USE CollegeDB;
+
+-- 2. DDL Commands (Creating Tables with Constraints)
+CREATE TABLE Department (
+    DeptID INT PRIMARY KEY,
+    DeptName VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE Student (
+    StudentID INT PRIMARY KEY,
+    StudentName VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) UNIQUE,
+    DeptID INT,
+    FOREIGN KEY (DeptID) REFERENCES Department(DeptID) ON DELETE SET NULL
+);
+
+CREATE TABLE Course (
+    CourseID INT PRIMARY KEY,
+    CourseName VARCHAR(50) NOT NULL,
+    Credits INT NOT NULL
+);
+
+CREATE TABLE Enrollment (
+    EnrollID INT PRIMARY KEY,
+    StudentID INT,
+    CourseID INT,
+    FOREIGN KEY (StudentID) REFERENCES Student(StudentID) ON DELETE CASCADE,
+    FOREIGN KEY (CourseID) REFERENCES Course(CourseID) ON DELETE CASCADE
+);
+
+-- 3. DML Commands (Inserting Records to match experiment output)
+INSERT INTO Department (DeptID, DeptName) VALUES 
+(1, 'CSE'),
+(2, 'AIML');
+
+INSERT INTO Student (StudentID, StudentName, Email, DeptID) VALUES 
+(101, 'Rahul', 'rahul@gmail.com', 1),
+(102, 'Priya', 'priya@gmail.com', 2);
+
+INSERT INTO Course (CourseID, CourseName, Credits) VALUES 
+(201, 'DBMS', 4),
+(202, 'Operating System', 4);
+
+INSERT INTO Enrollment (EnrollID, StudentID, CourseID) VALUES 
+(1, 101, 201),
+(2, 102, 202);
+
+-- 4. Displaying Table Contents (Generates the experiment output)
+SELECT * FROM Department;
+SELECT * FROM Student;
+SELECT * FROM Course;
+SELECT * FROM Enrollment;
+
+-- 5. Additional Queries (To fully cover Aim: Filtering, Sorting & Aggregates)
+-- Filtering with WHERE
+SELECT * FROM Course WHERE Credits >= 4;
+
+-- Sorting with ORDER BY
+SELECT * FROM Student ORDER BY StudentName ASC;
+
+-- Aggregate Functions with GROUP BY
+SELECT DeptID, COUNT(StudentID) AS TotalStudents 
+FROM Student 
+GROUP BY DeptID;
